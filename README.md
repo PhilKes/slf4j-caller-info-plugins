@@ -45,7 +45,7 @@ mvn slf4j-caller-info:inject
 _Note: The `inject` goal is idempotent_
 
 ## Code Example
-See [logback.xml](./src/it/projects/logback/src/test/resources/logback.xml):
+See [logback.xml](slf4j-caller-info-maven/src/it/projects/logback/src/test/resources/logback.xml):
 ```xml
 ...
 <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -56,7 +56,7 @@ See [logback.xml](./src/it/projects/logback/src/test/resources/logback.xml):
 </appender>
 ...
 ```
-See [LoggingTest.java](./src/it/projects/logback/src/main/java/io/github/philkes/slf4j/callerinfo/LoggingTest.java):
+See [LoggingTest.java](slf4j-caller-info-maven/src/it/projects/logback/src/main/java/io/github/philkes/slf4j/callerinfo/LoggingTest.java):
 ```java
 1   package io.github.philkes.slf4j.callerinfo;
 2

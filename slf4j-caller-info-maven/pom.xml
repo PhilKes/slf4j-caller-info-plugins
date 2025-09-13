@@ -1,0 +1,270 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.github.philkes</groupId>
+    <artifactId>slf4j-caller-info</artifactId>
+    <version>1.1.0</version>
+  </parent>
+  <artifactId>slf4j-caller-info-maven-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+  <version>1.1.0</version>
+  <name>SLF4J Caller-Information Injection Plugin</name>
+  <description>Maven plugin adding caller-information to all SLF4J Log statements during
+    compilation
+  </description>
+  <url>https://github.com/PhilKes/slfj4-caller-info-maven-plugin</url>
+
+
+  <properties>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+  </properties>
+
+  <developers>
+    <developer>
+      <id>Philkes</id>
+      <name>Philipp Kessler</name>
+      <url>https://www.github.com/PhilKes</url>
+    </developer>
+
+  </developers>
+
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git@github.com:PhilKes/slf4j-caller-info-maven-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:PhilKes/slf4j-caller-info-maven-plugin.git
+    </developerConnection>
+    <url>https://github.com/PhilKes/slf4j-caller-info-maven-plugin</url>
+  </scm>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>io.github.philkes</groupId>
+      <artifactId>slf4j-caller-info-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>3.9.4</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.9.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>3.6.1</version>
+          <configuration>
+            <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.8.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <projectsDirectory>slf4j-caller-info-maven/src/it/projects</projectsDirectory>
+          <settingsFile>slf4j-caller-info-maven/src/it/mrm/settings.xml</settingsFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>1</id>
+            <goals>
+              <goal>install</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>2</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>mrm-maven-plugin</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <id>repository</id>
+            <goals>
+              <goal>start</goal>
+              <goal>stop</goal>
+            </goals>
+            <configuration>
+              <repositories>
+                <mockRepo>
+                  <source>src/it/mrm/repository</source>
+                </mockRepo>
+                <proxyRepo/>
+              </repositories>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0-M7</version>
+      </plugin>
+    </plugins>
+  </build>
+
+
+  <profiles>
+    <profile>
+      <id>ci-cd</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <!-- Prevent gpg from using pinentry programs. Fixes: gpg: signing
+                      failed: Inappropriate ioctl for device -->
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>local</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-toolchains-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+              <toolchains>
+                <jdk>
+                  <version>1.8</version>
+                </jdk>
+              </toolchains>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>toolchain</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>

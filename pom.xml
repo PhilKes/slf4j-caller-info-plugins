@@ -2,11 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.philkes</groupId>
-    <artifactId>slf4j-caller-info-maven-plugin</artifactId>
-    <packaging>maven-plugin</packaging>
+    <artifactId>slf4j-caller-info</artifactId>
     <version>1.1.0</version>
-    <name>SLF4J Caller-Information Injection Plugin</name>
-    <description>Maven plugin adding caller-information to all SLF4J Log statements during compilation</description>
+  <packaging>pom</packaging>
+  <name>SLF4J Caller-Information Injection</name>
     <url>https://github.com/PhilKes/slfj4-caller-info-maven-plugin</url>
 
     <properties>
@@ -20,9 +19,7 @@
             <name>Philipp Kessler</name>
             <url>https://www.github.com/PhilKes</url>
         </developer>
-
     </developers>
-
 
     <licenses>
         <license>
@@ -37,223 +34,10 @@
         <url>https://github.com/PhilKes/slf4j-caller-info-maven-plugin</url>
     </scm>
 
-
-
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.9.4</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.9.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/asm/asm -->
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>9.6</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm-commons -->
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-commons</artifactId>
-            <version>9.5</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-ext</artifactId>
-            <version>1.7.36</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.6.1</version>
-                    <configuration>
-                        <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-invoker-plugin</artifactId>
-                <version>3.2.2</version>
-                <configuration>
-                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <projectsDirectory>src/it/projects</projectsDirectory>
-                    <settingsFile>src/it/mrm/settings.xml</settingsFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>1</id>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>2</id>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>mrm-maven-plugin</artifactId>
-                <version>1.4.1</version>
-                <executions>
-                    <execution>
-                        <id>repository</id>
-                        <goals>
-                            <goal>start</goal>
-                            <goal>stop</goal>
-                        </goals>
-                        <configuration>
-                            <repositories>
-                                <mockRepo>
-                                    <source>src/it/mrm/repository</source>
-                                </mockRepo>
-                                <proxyRepo/>
-                            </repositories>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M7</version>
-            </plugin>
-        </plugins>
-    </build>
-
-
-    <profiles>
-        <profile>
-            <id>ci-cd</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <!-- Prevent gpg from using pinentry programs. Fixes: gpg: signing
-                                        failed: Inappropriate ioctl for device -->
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>local</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-toolchains-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <configuration>
-                            <toolchains>
-                                <jdk>
-                                    <version>1.8</version>
-                                </jdk>
-                            </toolchains>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>toolchain</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <modules>
+      <module>slf4j-caller-info-maven</module>
+      <module>slf4j-caller-info-core</module>
+    </modules>
 
     <distributionManagement>
         <snapshotRepository>
@@ -265,20 +49,4 @@
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

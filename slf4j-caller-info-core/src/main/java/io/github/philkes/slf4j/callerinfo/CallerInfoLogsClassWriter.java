@@ -2,10 +2,8 @@ package io.github.philkes.slf4j.callerinfo;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.*;
-import org.apache.maven.plugin.logging.Log;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.slf4j.event.Level;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -31,10 +28,10 @@ public class CallerInfoLogsClassWriter {
     private final Boolean includePackageName;
     private final List<String> injectedMethods;
 
-    private final Log log;
+    private final Logger log;
 
     public CallerInfoLogsClassWriter(File target, ClassFilters filters, String injectionMdcParameter,
-                                     String injection, Boolean includePackageName, List<String> injectedMethods, Log log) throws IOException {
+                                     String injection, Boolean includePackageName, List<String> injectedMethods, Logger log) throws IOException {
         this.targetClassDir = target;
         this.filters = filters;
         this.injectionMdcParameter = injectionMdcParameter;

@@ -22,29 +22,29 @@ public class AddCallerInfoToLogsVisitor extends ClassVisitor {
     public static final String INJECTED_METHOD_PATTERN = "%s#%s";
 
     /**
-     * Fully package path of {@link org.slf4j.Logger}
+     * Fully package path of {@link Logger}
      */
     public static final String SLF4J_LOGGER_FQN = toPath(Logger.class);
 
     /**
-     * Full package path of {@link org.slf4j.MDC}
+     * Full package path of {@link MDC}
      */
     public static final String SLF4J_MDC_FQN = toPath(MDC.class);
     /**
-     * Method name of {@link org.slf4j.MDC#put(String, String)}
+     * Method name of {@link MDC#put(String, String)}
      */
     public static final String SLF4J_MDC_PUT_METHOD_NAME = "put";
     /**
-     * Parameters descriptor of {@link org.slf4j.MDC#put(String, String)}
+     * Parameters descriptor of {@link MDC#put(String, String)}
      */
     public static final String SLF4J_MDC_PUT_METHOD_DESCRIPTOR = getMethodDescriptor(MDC.class, SLF4J_MDC_PUT_METHOD_NAME, String.class, String.class);
 
     /**
-     * Method name of {@link org.slf4j.MDC#remove(String)}
+     * Method name of {@link MDC#remove(String)}
      */
     public static final String SLF4J_MDC_REMOVE_METHOD_NAME = "remove";
     /**
-     * Parameters descriptor of {@link org.slf4j.MDC#remove(String)}
+     * Parameters descriptor of {@link MDC#remove(String)}
      */
     public static final String SLF4J_MDC_REMOVE_METHOD_DESCRIPTOR = getMethodDescriptor(MDC.class, SLF4J_MDC_REMOVE_METHOD_NAME, String.class);
 
