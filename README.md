@@ -1,6 +1,6 @@
-# slf4j-caller-info-maven-plugin
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-maven-plugin)
-[![Known Vulnerabilities](https://snyk.io/test/github/PhilKes/slf4j-caller-info-maven-plugin/badge.svg)](https://snyk.io/test/github/PhilKes/slf4j-caller-info-maven-plugin)
+# slf4j-caller-info-plugins
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-plugins)
+[![Known Vulnerabilities](https://snyk.io/test/github/PhilKes/slf4j-caller-info-plugins/badge.svg)](https://snyk.io/test/github/PhilKes/slf4j-caller-info-plugins)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue)](./LICENSE)
 
 Maven plugin to **inject caller-location-information** to all [SLF4J Logger](https://www.slf4j.org/api/org/slf4j/Logger.html) log statement invocations (`info()`, etc.) in your compiled code, as a better alternative to SLF4J caller location evaluation during runtime. Also allows to inject caller-information when using wrapper classes/methods (see [Configuration/injectedMethods](#configuration)).
