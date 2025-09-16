@@ -1,9 +1,10 @@
 # slf4j-caller-info-plugins
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-plugins)
+<a href="https://plugins.gradle.org/plugin/io.github.philkes.slf4j-caller-info"><img alt="Gradle Plugin Portal Version" src="https://img.shields.io/gradle-plugin-portal/v/io.github.philkes.slf4j-caller-info"></a>
 [![Known Vulnerabilities](https://snyk.io/test/github/PhilKes/slf4j-caller-info-plugins/badge.svg)](https://snyk.io/test/github/PhilKes/slf4j-caller-info-plugins)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue)](./LICENSE)
 
-Maven plugin to **inject caller-location-information** to all [SLF4J Logger](https://www.slf4j.org/api/org/slf4j/Logger.html) log statement invocations (`info()`, etc.) in your compiled code, as a better alternative to SLF4J caller location evaluation during runtime. Also allows to inject caller-information when using wrapper classes/methods (see [Configuration/injectedMethods](#configuration)).
+Maven and Gradle plugins to **inject caller-location-information** to all [SLF4J Logger](https://www.slf4j.org/api/org/slf4j/Logger.html) log statement invocations (`info()`, etc.) in your compiled code, as a better alternative to SLF4J caller location evaluation during runtime. Also allows to inject caller-information when using wrapper classes/methods (see [Configuration/injectedMethods](#configuration)).
 
 
 ## Description
@@ -15,7 +16,9 @@ The injection is done with a [MDC.put(...)](https://www.slf4j.org/api/org/slf4j/
 Since this plugin adds the necessary code during the build stage, there is **nearly no performance loss** by injecting the caller-location-information in comparison to using e.g. the `%class` or `%line` pattern parameters (see [Log4j2 manual](https://logging.apache.org/log4j/2.x/manual/layouts.html#Patterns) or [Logback manual](https://logback.qos.ch/manual/layouts.html#class) in your logging pattern, which look for the caller-information on the stacktrace during runtime which is very costly.
 
 ## Usage
-Add the plugin to your `pom.xml`:
+
+### Maven
+Add the Maven plugin to your `pom.xml`:
 
 ```xml
 <build>
@@ -35,14 +38,28 @@ Add the plugin to your `pom.xml`:
     </plugins>
 </build>
 ```
-*Note: JDK 8 or higher required*
 
-The plugin is executed in the `process-classes` phase or can be explicitly run with:
+The plugin runs during `process-classes` or can be executed explicitly:
 ```shell
 mvn slf4j-caller-info:inject
 ```
 
-_Note: The `inject` goal is idempotent_
+### Gradle
+Apply the Gradle plugin in your build file.
+
+Kotlin DSL (`build.gradle.kts`):
+```kotlin
+plugins {
+    id("io.github.philkes.slf4j-caller-info") version "1.1.0"
+}
+```
+
+The plugin automatically runs after `JavaCompile`. You can also execute the task directly:
+```shell
+./gradlew slf4InjectCallerInfo
+```
+
+Note: JDK 8 or higher required
 
 ## Code Example
 See [logback.xml](slf4j-caller-info-maven/src/it/projects/logback/src/test/resources/logback.xml):
@@ -108,35 +125,68 @@ but even for a project with 10,000 classes the compilation time is ~2 seconds, w
 
 
 ### Configuration
-There are several parameters you can overwrite:
+You have many optionally settings to further configure the plugin:
+- injection: String pattern that may contain conversion words `%class`, `%line`, `%method` (default: `%class:%line`).
+- injectionMdcParameter: MDC key name used in your logging pattern (default: `callerInformation`).
+- includePackageName: Whether the package name should be printed when `%class` is used (default: `false`).
+- filters: Include/Exclude regexes matching class files to inject into (defaults: includes `.*`, excludes empty).
+- injectedMethods: Optional list of method descriptors to inject into. By default all standard SLF4J `Logger` methods are injected. You can add your own when using logging wrappers. Format: `<PACKAGE_PATH>/<CLASS_NAME>#<METHOD_NAME>`; method name may be a regex like `.*`.
+
+#### Maven
 ```xml
 <configuration>
-<!-- All parameters are optional, the shown default values are used if they are not overwritten in your pom.xml --> 
-    <!-- Injection format which can include conversion words: class,line,method -->
-    <injection>%class:%line</injection>
-    <!-- MDC parameter name for the injection, this parameter has to be present in your logging.pattern ('%X{callerInformation}') -->
-    <injectionMdcParameter>callerInformation</injectionMdcParameter>
-    <!-- Regex for specifying which packages/classfiles should be injected into (path and class-file name) -->
-    <filters>
-        <includes>
-            <include>.*</include>
-        </includes>
-        <excludes></excludes>
-    </filters>
-    <!-- Method descriptors to configure for which method calls the caller-information should be injected to -->
-    <!-- By default all common SLF4J log methods are injected into, but this parameter also allows to inject to custom methods, e.g. when using wrapper classes for logging -->
-    <injectedMethods>
-        <injectedMethod>org/slf4j/Logger#info</injectedMethod>
-        <injectedMethod>org/slf4j/Logger#warn</injectedMethod>
-        <injectedMethod>org/slf4j/Logger#error</injectedMethod>
-        <injectedMethod>org/slf4j/Logger#debug</injectedMethod>
-        <injectedMethod>org/slf4j/Logger#trace</injectedMethod>
-    </injectedMethods>
-    <!-- Whether or not to print the package-name of the class, if '%class' is present in 'injection' parameter -->
-    <includePackageName>false</includePackageName>
-    <!-- Target directory which contains the compiled '.class' files -->
-    <target>${project.build.outputDirectory}</target>
+  <!-- All parameters are optional; shown values are defaults -->
+  <injection>%class:%line</injection>
+  <injectionMdcParameter>callerInformation</injectionMdcParameter>
+  <filters>
+    <includes>
+      <include>.*</include>
+    </includes>
+    <excludes/>
+  </filters>
+  <injectedMethods>
+    <injectedMethod>org/slf4j/Logger#info</injectedMethod>
+    <injectedMethod>org/slf4j/Logger#warn</injectedMethod>
+    <injectedMethod>org/slf4j/Logger#error</injectedMethod>
+    <injectedMethod>org/slf4j/Logger#debug</injectedMethod>
+    <injectedMethod>org/slf4j/Logger#trace</injectedMethod>
+  </injectedMethods>
+  <includePackageName>false</includePackageName>
+  <!-- Target directory containing compiled classes -->
+  <target>${project.build.outputDirectory}</target>
 </configuration>
+```
+
+#### Gradle (Kotlin DSL)
+```kotlin
+slf4jCallerInfo {
+    // All parameters are optional; shown values are defaults
+    injection = "%class:%line"
+    injectionMdcParameter = "callerInformation"
+    includePackageName = false
+
+    // Limit injection to specific classes (regex on classfile path or name)
+    filters = io.github.philkes.slf4j.callerinfo.ClassFilters().apply {
+        includes = listOf(".*")
+        excludes = listOf()
+    }
+
+    // Optionally override which methods to inject into (e.g., when using wrappers)
+    // Format: <PACKAGE_PATH>/<CLASS_NAME>#<METHOD_NAME>
+    // By default all SLF4J Logger methods (info,warn,error,debug,trace) are injected.
+    // injectedMethods = listOf(
+    //     "org/slf4j/Logger#info",
+    //     "org/slf4j/Logger#warn",
+    //     "org/slf4j/Logger#error",
+    //     "org/slf4j/Logger#debug",
+    //     "org/slf4j/Logger#trace",
+    //     "io/github/yourapp/logging/LoggingWrapper#customLogMethod.*"
+    // )
+
+    // Advanced toggles
+    // enabled = true
+    // runAfterJavaCompile = true // plugin runs after JavaCompile by default
+}
 ```
 
 ### Compiled .class File of Code Example

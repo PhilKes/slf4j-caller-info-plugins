@@ -31,7 +31,7 @@ public class Slf4jCallerInfoMojoTest {
         MemoryAppender memoryAppender = initMemoryAppender(loggingWrapper.getClass());
         String msg = "This is a test message";
         test.log(msg);
-        int infoLogLineNumber = 10; // see Test class for first loggingWrapper call line number
+        int infoLogLineNumber = 7; // see Test class for first loggingWrapper call line number
         String className = test.getClass().getSimpleName() + ".java";
         List<ILoggingEvent> logEvents = memoryAppender.search(msg, Level.INFO);
         assertEquals(3, logEvents.size());
