@@ -13,6 +13,7 @@
     <properties>
         <maven.version>3.8.7</maven.version>
     </properties>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-perf -->
         <dependency>
@@ -32,7 +33,6 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
         </dependency>
 <!--        <dependency>
             <groupId>org.apache.maven</groupId>
@@ -57,7 +57,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.13.0</version>
         </dependency>
     </dependencies>
 

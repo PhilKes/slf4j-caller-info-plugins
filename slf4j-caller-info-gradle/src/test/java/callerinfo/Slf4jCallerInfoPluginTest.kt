@@ -27,7 +27,7 @@ class Slf4jCallerInfoPluginTest {
         val testProjectDir = javaClass.getResource("/$fixtureName")!!.toURI().toPath().toFile()
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir)
-            .withArguments("test", "--stacktrace")
+            .withArguments("clean", "test", "--stacktrace")
             .forwardOutput() // show fixture build output in test logs
             .build()
 

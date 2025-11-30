@@ -16,15 +16,16 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("io.github.philkes:slf4j-caller-info-bom:${version}"))
     implementation("io.github.philkes:slf4j-caller-info-core:${version}")
-    implementation("org.ow2.asm:asm:9.6")
-    implementation("org.ow2.asm:asm-commons:9.5")
-    implementation("commons-io:commons-io:2.13.0")
-    implementation("org.slf4j:slf4j-ext:1.7.36")
+    implementation("org.ow2.asm:asm")
+    implementation("org.ow2.asm:asm-commons")
+    implementation("commons-io:commons-io")
+    implementation("org.slf4j:slf4j-ext")
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation("junit:junit")
     testImplementation(gradleTestKit())
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     implementation(kotlin("stdlib-jdk8"))
 }
