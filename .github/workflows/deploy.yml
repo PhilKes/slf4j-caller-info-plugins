@@ -21,8 +21,8 @@ jobs:
           distribution: temurin
           java-version: '8'
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: SIGN_KEY_PASS
       - name: Build with Maven
@@ -30,8 +30,8 @@ jobs:
       - name: Publish Maven plugin
         run: ./mvnw -B deploy -pl slf4j-caller-info-maven -Dgpg.keyname=${{ secrets.MAVEN_GPG_PRIVATE_KEY }} -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Pci-cd
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SIGN_KEY_PASS: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Make Gradle wrapper executable
         working-directory: ./slf4j-caller-info-gradle
