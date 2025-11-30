@@ -8,18 +8,14 @@ on:
       - '**'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build with Maven
-        run: mvn -B clean install
   deploy:
     if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Maven Central Repository (JDK 8)
+      - name: Make Maven wrapper executable
+        run: chmod +x ./mvnw
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: temurin
@@ -28,13 +24,15 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          gpg-passphrase: SIGN_KEY_PASS
+      - name: Build with Maven
+        run: ./mvnw -B clean install
       - name: Publish Maven plugin
-        run: mvn -B clean deploy -Pci-cd
+        run: ./mvnw -B deploy -pl slf4j-caller-info-maven -Dgpg.keyname=${{ secrets.MAVEN_GPG_PRIVATE_KEY }} -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Pci-cd
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          SIGN_KEY_PASS: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Make Gradle wrapper executable
         working-directory: ./slf4j-caller-info-gradle
         run: chmod +x ./gradlew

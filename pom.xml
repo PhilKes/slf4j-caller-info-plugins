@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.philkes</groupId>
     <artifactId>slf4j-caller-info</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
   <packaging>pom</packaging>
   <name>SLF4J Caller-Information Injection</name>
   <url>https://github.com/PhilKes/slfj4-caller-info-plugins</url>
