@@ -1,5 +1,5 @@
 # slf4j-caller-info-plugins
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-plugins)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.philkes/slf4j-caller-info-maven-plugin/badge.svg)](https://mvnrepository.com/artifact/io.github.philkes/slf4j-caller-info-maven-plugin)
 <a href="https://plugins.gradle.org/plugin/io.github.philkes.slf4j-caller-info"><img alt="Gradle Plugin Portal Version" src="https://img.shields.io/gradle-plugin-portal/v/io.github.philkes.slf4j-caller-info"></a>
 [![Known Vulnerabilities](https://snyk.io/test/github/PhilKes/slf4j-caller-info-plugins/badge.svg)](https://snyk.io/test/github/PhilKes/slf4j-caller-info-plugins)
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue)](./LICENSE)
